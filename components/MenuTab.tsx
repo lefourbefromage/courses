@@ -188,11 +188,19 @@ export default function MenuTab({
                         {canUseLeftovers && !titled && (
                           <button
                             className="mini leftover-btn"
-                            // Empêche la case de perdre le focus au moment du
-                            // clic : sans ça le bouton disparaîtrait avant que
-                            // le clic n'aboutisse.
-                            onPointerDown={(e) => e.preventDefault()}
-                            onClick={() => onPickLeftover(day, slot.id)}
+                            // Le bouton n'est visible que tant que la case a le
+                            // focus. Sur mobile, le toucher fait perdre ce focus
+                            // avant le clic, qui tombe alors sur un bouton
+                            // caché : on agit donc dès l'appui. Le clic ne sert
+                            // plus qu'au clavier (detail === 0).
+                            onPointerDown={(e) => {
+                              e.preventDefault();
+                              onPickLeftover(day, slot.id);
+                              (document.activeElement as HTMLElement | null)?.blur();
+                            }}
+                            onClick={(e) => {
+                              if (e.detail === 0) onPickLeftover(day, slot.id);
+                            }}
                             title="Ce repas est les restes d’un autre"
                             aria-label={`${name} ${slot.label} : marquer comme restes`}
                           >

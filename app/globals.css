@@ -73,6 +73,15 @@ button {
   cursor: pointer;
 }
 
+/* Safari iOS zoome sur tout champ dont la police fait moins de 16px. */
+@media (pointer: coarse) {
+  input,
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+}
+
 :focus-visible {
   outline: 3px solid rgba(20, 69, 58, 0.3);
   outline-offset: 2px;
